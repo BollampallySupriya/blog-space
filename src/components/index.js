@@ -3,6 +3,7 @@ import Footer from './Footer/Footer'
 import Container from './Container/Container'
 import Logo from './Logo'
 import Logout from './Header/Logout'
+import RTE from './RTE'
 
 
 export { 
@@ -10,5 +11,6 @@ export {
     Footer, 
     Container,
     Logo,
-    Logout 
+    Logout,
+    RTE 
 }

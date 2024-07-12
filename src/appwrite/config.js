@@ -2,9 +2,6 @@ import conf from '../conf/conf'
 import { Client, ID, Databases, Storage, Query } from 'appwrite'
 
 
-
-
-
 export class Service {
     client = new Client();
     databases;
@@ -18,7 +15,7 @@ export class Service {
         this.storage = new Storage(this.client);
     }
 
-    async createBlog({title, slug, content, featuredImage, status, userId}) {
+    async createBlog({title, slug, content, featuredimage, status, userId}) {
         try {
             return await this.databases.createDocument(
                 conf.appwriteDatabaseId, 
@@ -27,7 +24,7 @@ export class Service {
                 {
                     title,
                     content,
-                    featuredImage, 
+                    featuredimage, 
                     status,
                     userId
                 }
@@ -37,7 +34,7 @@ export class Service {
         }
     }
 
-    async updateBlog(slug, {title, content, featuredImage, status, userId}) {
+    async updateBlog(slug, {title, content, featuredimage, status, userId}) {
         try {
             return await this.databases.updateDocument(
                 conf.appwriteDatabaseId, 
@@ -46,7 +43,7 @@ export class Service {
                 {
                     title,
                     content,
-                    featuredImage,
+                    featuredimage,
                     status
                 }
             )

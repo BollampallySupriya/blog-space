@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux'
 
 function PostForm({post}) {
     const navigate = useNavigate()
-    const userData = useSelector(state => state.user.userData)
+    const userData = useSelector(state => state.auth.userData)
     const {register, handleSubmit, watch, setValue, control, getValues} = useForm({
         defaultValues: {
             title: post?.title || '',
@@ -21,17 +21,17 @@ function PostForm({post}) {
         if (post) {
             const file = data.image[0] ? service.uploadFile(data.image[0]) : null
             if (file){
-                service.deleteFile(post.featuredImage)
+                service.deleteFile(post.featuredimage)
             }
-            const dbPost = await service.updateBlog(post.$id, {...data, featuredImage: file ? file.$id : undefined})
+            const dbPost = await service.updateBlog(post.$id, {...data, featuredimage: file ? file.$id : undefined})
             if (dbPost){
                 navigate(`/post/${dbPost.$id}`)
             }
         } else {
-            const file = data.image[0] ? service.uploadFile(data.image[0]) : null 
+            const file = await service.uploadFile(data.image[0])
             if (file) {
                 const fileId = file.$id
-                data.featuredImage = fileId
+                data.featuredimage = fileId
                 const dbPost = await service.createBlog({...data, userId: userData.$id})
                 if (dbPost) {
                     navigate(`/post/${dbPost.$id}`)
@@ -42,7 +42,7 @@ function PostForm({post}) {
 
     const slugTransform = useCallback((value) => {
         if (value && typeof(value) === "string")
-            return value.trim().toLowerCase().replace(/^[a-zA-Z\d\s]+/g, '-').replace(/\s/g, '-');
+            return value.trim().toLowerCase().replace(/[^a-zA-Z\d\s]+/g, '-').replace(/\s/g, '-');
         return '';
     }, [])
 
@@ -57,7 +57,7 @@ function PostForm({post}) {
         }
     }, [watch, slugTransform, setValue])
   return (
-    <form onSubmit={submit} className='flex flex-wrap'>
+    <form onSubmit={handleSubmit(submit)} className='flex flex-wrap'>
         <div className="px-2 w-2/3">
             <Input 
                 label="Title: "
@@ -89,7 +89,7 @@ function PostForm({post}) {
             />
             {post && (
                 <div className="w-full mb-4">
-                    <img src={service.getFilePreview(post.featuredImage)} 
+                    <img src={service.getFilePreview(post.featuredimage)} 
                         alt={post.title} className='rounded-lg'
                     />
                 </div>

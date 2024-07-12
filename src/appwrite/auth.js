@@ -27,7 +27,7 @@ export class AuthService {
 
     async logIn({email, password}) {
         try {
-            return await this.account.createEmailSession(email, password);
+            return await this.account.createEmailPasswordSession(email, password);
         } catch (error) {
             throw error;
         }
@@ -45,7 +45,7 @@ export class AuthService {
     async logOut() {
         try {
             // await this.account.deleteSessions('all'); this is used to delete all existing sessions in all browsers. 
-            return await this.account.deleteSession('current');
+            return await this.account.deleteSessions();
         } catch (error) {
             console.log(error);
             throw error;
